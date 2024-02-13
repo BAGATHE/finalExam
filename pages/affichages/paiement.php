@@ -1,3 +1,10 @@
+<?php
+include "../../inc/function.php";
+session_start();
+$date_min=$_GET["date_min"];
+$date_max=$_GET["date_max"];
+$paiments=getListePaiments($_SESSION["poid_minimal"],$_SESSION["bonus"],$_SESSION["malus"],$date_min,$date_max);
+?>
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
 
@@ -10,6 +17,19 @@
     <link rel="stylesheet" href="../../assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min-1.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .table-responsive {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -21,13 +41,10 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="../affichages/backoffice.html"><i class="fas fa-tachometer-alt"></i><span>Variete de thé</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/parcelle.php"><i class="fas fa-table"></i><span>parcelle</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/cueilleur.php"><i class="fas fa-user"></i><span>Ceuilleur</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/categorie_depense.php"><i class="fas fa-table"></i><span>Categorie depense</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/config_salaire.php"><i class="fas fa-table"></i><span>Configuration salaire</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/regeneration-the.html"><i class="fas fa-table"></i><span>saison de generation</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/quotaceuilleure.html"><i class="fas fa-table"></i><span>quota journalier</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="../affichages/frontoffice.php"><i class="fas fa-table"></i><span>Ceuillette</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="../affichages/depense.php"><i class="fas fa-table"></i><span>depense</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="../affichages/formulaire_date.html"><i class="fas fa-table"></i><span>resultat</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="../affichages/listpayementceuilleur.php"><i class="fas fa-table"></i><span>list payement ceuilleur</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -36,21 +53,44 @@
             <div id="content">
                 <nav class="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                    <form  action="../traitement/deconnection.php" method="get" class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <form  action="../traitement/deconnection.php" method="get" class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
                             <p>ProducTea</p>
                             <button class="btn btn-primary" type="submit">deconnection</button>
                         </form>
                     </div>
                 </nav>
                 <div class="row">
-                   <div class="col-md-6 mx-auto">
-                   <h2 class="text-center mb-4">Configuration Montant Salarial</h2>
-                     <form action="../traitement/traitement_config_salaire.php" method="get">
-                     <div class="form-group"><label class="form-label" for="montantSalarial">Montant Salarial par Kg :</label>
-                     <input class="form-control form-control" type="number" id="montantSalarial" name="salaire_kg" placeholder="Entrez le montant salarial par kg" required="" step="0.01"></div><button class="btn btn-primary btn-block" type="submit">Enregistrer</button>
-                     </form>
-                   </div>
-                </div>
+                    <div class="col-md-6 mx-auto">
+                    <h2 class="text-center mb-4">Liste des Paiement</h2>
+    
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                <th>date</th>
+                <th>nom</th>
+                <th>bonus</th>
+                <th>malus</th>
+                <th>Montant salaire</th>
+                </tr>
+            </thead>
+            <tbody>
+                  <?php 
+            foreach ($paiments as $payment) {
+                echo "<tr>";
+                echo "<td>" . $payment['date_ceuillette'] . "</td>";
+                echo "<td>" . $payment['nom'] . "</td>";
+                echo "<td>" . $payment['bonus_amount']."%" . "</td>";
+                echo "<td>" . $payment['malus_amount']."%" . "</td>";
+                echo "<td>" . getSalaireKg(). "</td>";
+                echo "</tr>";
+            }
+        ?>
+            </tbody>
+        </table>
+    </div>                
+    </div>
+         </div>
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">

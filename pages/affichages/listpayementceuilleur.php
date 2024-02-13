@@ -1,3 +1,9 @@
+<?php 
+include "../../inc/function.php"; 
+$parcelles = getParcelle(); 
+$ceuilleur = getCeuilleur();
+?>
+
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
 
@@ -10,6 +16,19 @@
     <link rel="stylesheet" href="../../assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../../assets/css/bootstrap.min-1.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+        }
+        .table-responsive {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -21,13 +40,10 @@
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link active" href="../affichages/backoffice.html"><i class="fas fa-tachometer-alt"></i><span>Variete de thé</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/parcelle.php"><i class="fas fa-table"></i><span>parcelle</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/cueilleur.php"><i class="fas fa-user"></i><span>Ceuilleur</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/categorie_depense.php"><i class="fas fa-table"></i><span>Categorie depense</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/config_salaire.php"><i class="fas fa-table"></i><span>Configuration salaire</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/regeneration-the.html"><i class="fas fa-table"></i><span>saison de generation</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="../affichages/quotaceuilleure.html"><i class="fas fa-table"></i><span>quota journalier</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="../affichages/frontoffice.php"><i class="fas fa-table"></i><span>Ceuillette</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="../affichages/depense.php"><i class="fas fa-table"></i><span>depense</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="../affichages/formulaire_date.html"><i class="fas fa-table"></i><span>resultat</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="../affichages/listpayementceuilleur.php"><i class="fas fa-table"></i><span>list payement ceuilleur</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -43,14 +59,57 @@
                     </div>
                 </nav>
                 <div class="row">
-                   <div class="col-md-6 mx-auto">
-                   <h2 class="text-center mb-4">Configuration Montant Salarial</h2>
-                     <form action="../traitement/traitement_config_salaire.php" method="get">
-                     <div class="form-group"><label class="form-label" for="montantSalarial">Montant Salarial par Kg :</label>
-                     <input class="form-control form-control" type="number" id="montantSalarial" name="salaire_kg" placeholder="Entrez le montant salarial par kg" required="" step="0.01"></div><button class="btn btn-primary btn-block" type="submit">Enregistrer</button>
-                     </form>
-                   </div>
-                </div>
+                    <div class="col-md-6 mx-auto">
+                    <h2 class="text-center mb-4">Liste des Paiements pour les Cueilleurs</h2>
+
+    <form action="paiement.php" method="get">
+        <div class="form-group">
+            <label for="dateDebut">Date de Début :</label>
+            <input type="date" class="form-control" name="date_min" required>
+        </div>
+        <div class="form-group">
+            <label for="dateFin">Date de Fin :</label>
+            <input type="date" class="form-control" name="date_max"required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Afficher la Liste</button>
+    </form>
+
+    <!--
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Nom du Cueilleur</th>
+                    <th>Poids</th>
+                    <th>% Bonus</th>
+                    <th>% Malus</th>
+                    <th>Montant Paiement</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2022-03-01</td>
+                    <td>Cueilleur 1</td>
+                    <td>50 kg</td>
+                    <td>5%</td>
+                    <td>2%</td>
+                    <td>120 000Ar</td>
+                </tr>
+                <tr>
+                    <td>2022-03-02</td>
+                    <td>Cueilleur 2</td>
+                    <td>40 kg</td>
+                    <td>3%</td>
+                    <td>1%</td>
+                    <td>80 000Ar</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    -->                
+    </div>
+         </div>
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">

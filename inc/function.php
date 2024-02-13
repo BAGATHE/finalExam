@@ -18,8 +18,8 @@
         mysqli_query(connect(), "INSERT INTO parcelle values (default,'$surface_en_hectare',$id_variete_the)");
     }
 
-    function insertVariete($nom_variete,$occupation,$rendement_mensuel){
-        mysqli_query(connect(), "INSERT INTO variete_the values (default,'$nom_variete',$occupation,$rendement_mensuel)");
+    function insertVariete($nom_variete,$occupation,$rendement_mensuel,$prix_vente){
+        mysqli_query(connect(), "INSERT INTO variete_the values (default,'$nom_variete',$occupation,$rendement_mensuel,$prix_vente)");
     }
     
     function getVarieteThe(){
@@ -132,6 +132,7 @@
    
     }
 
+  
     function poidsRestants($date_min,$date_max){
         $sql="SELECT  sum((((surface_en_hectare*1000)/ocupation)*rendement_mensuel)) -sum(poid_ceuillette) as total_rendement from parcelle natural join variete_the natural join ceuillette where 
         date_ceuillette >='$date_min' and date_ceuillette <='$date_max'";
@@ -146,33 +147,93 @@
     }
 
     function coutDeRevient($date_min,$date_max){
-        if( sumPoidCeuillette($date_min,$date_max)==0){
-            return sumDepenseTotal($date_min,$date_max)/ 1;
+        if(sumPoidCeuillette($date_min,$date_max)== 0){
+            return 0;
         }else{
-            return sumDepenseTotal($date_min,$date_max)/ sumPoidCeuillette($date_min,$date_max);
+        return sumDepenseTotal($date_min,$date_max)/ sumPoidCeuillette($date_min,$date_max);
         }
-        
     }
 
+    function getMonth($date){ 
+        $month = date('m', strtotime($date));
+        return $month;
+    }
 
-
-
-
-
-
-
-
-//172.20.0.167
-    /*function checkSize($id_variete_the,$surface_en_hectare){
-        $req="select ocupation from variete_the where id_variete_the=$id_variete_the";
-        $req = mysqli_query(connect(), $req);
-        $size=0;
-        if($data = mysqli_fetch_assoc($req)) {
-            $size=$data["ocupation"];
+    function getListePaiments($min,$bonus,$malus,$date_min,$date_max){
+        $sql="select date_ceuillette, nom,id_parcelle, sum(poid_ceuillette) as somme,case when sum(poid_ceuillette) >$min then $bonus else 0 end as bonus_amount,case when sum(poid_ceuillette) < $min then $malus else 0 end as malus_amount from ceuillette natural join cueilleur where date_ceuillette >='$date_min' and date_ceuillette<='$date_max' group by id_parcelle,ceuillette.id_ceuilleur,date_ceuillette";
+        $sql = mysqli_query(connect(), $sql);
+        $retour=array();
+        while($data=mysqli_fetch_assoc($sql)){
+            $retour[]=array("date_ceuillette" => $data['date_ceuillette'],"nom" => $data['nom'],"id_parcelle" => $data['id_parcelle'],"bonus_amount" => $data['bonus_amount'],"malus_amount" => $data['malus_amount']);
         }
-        if ($size < $surface_en_hectare) {
-            return $size;
+        return $retour;
+    }
+    function montantDesVentes($date_min, $date_max){
+        $sql = "CREATE OR REPLACE VIEW v_montants_vente AS SELECT SUM(poid_ceuillette) * prix_vente AS montant_depense FROM ceuillette NATURAL JOIN parcelle NATURAL JOIN variete_the WHERE date_ceuillette >= '$date_min' AND date_ceuillette <= '$date_max' GROUP BY id_variete_the";
+        mysqli_query(connect(), $sql);
+    }
+    
+    //to be called
+    function sum_v_montants($date_min, $date_max){
+        montantDesVentes($date_min, $date_max);
+        $sql = "SELECT IFNULL(SUM(montant_depense), 0) AS somme FROM v_montants_vente";
+        $result = mysqli_query(connect(), $sql);
+        $retour = 0;
+        if($data = mysqli_fetch_assoc($result)){
+            $retour = $data["somme"];
         }
-        else{return 0; }
-    }*/
+        return $retour;
+    }
+    
+    function getSalaireKg(){
+        $sql = "SELECT salaire_kg FROM config_salaire ORDER BY id_config_salaire DESC LIMIT 1";
+        $result = mysqli_query(connect(), $sql);
+        $retour = 0;
+        if($data = mysqli_fetch_assoc($result)){
+            $retour = $data["salaire_kg"];
+        }
+        return $retour;
+    }
+    
+    function getDepenseBetween($date_min, $date_max){
+        $sql = "SELECT IFNULL(SUM(montant), 0) AS montant FROM depense WHERE date_depense >= '$date_min' AND date_depense <= '$date_max'";
+        $result = mysqli_query(connect(), $sql);
+        $retour = 0;
+        if($data = mysqli_fetch_assoc($result)){
+            $retour = $data["montant"];
+        }
+        return $retour;
+    }
+    
+    function getPoidsBetween($date_min, $date_max){
+        $sql = "SELECT IFNULL(SUM(poid_ceuillette), 0) AS somme FROM ceuillette WHERE date_ceuillette >= '$date_min' AND date_ceuillette <= '$date_max'";
+        $result = mysqli_query(connect(), $sql);
+        $retour = 0;
+        if($data = mysqli_fetch_assoc($result)){
+            $retour = $data["somme"];
+        }
+        return $retour;
+    }
+    //to be called
+    function getMontantDepense($date_min, $date_max){
+        return getPoidsBetween($date_min, $date_max) * getSalaireKg() + getDepenseBetween($date_min, $date_max);
+    }
+    //to be called
+    function Benefice($date_min, $date_max){
+        return sum_v_montants($date_min, $date_max) - getMontantDepense($date_min, $date_max);
+    }
+    
+
+
+
+    function deleteInCueillette(){
+        mysqli_query(connect(), "DELETE from ceuillette"); 
+    }    
+
+
 ?>
+
+
+
+
+

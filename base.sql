@@ -67,3 +67,6 @@ insert into user values(default,"Angelo","Emadaly","angelo@gmail.com",sha1("ange
 
 insert into user values(default,"Manda","Luc","manda@gmail.com",sha1("manda"),"client");
 
+
+
+sudo /opt/lampp/bin/mysql -h 172.20.0.167 -u ETU002658 -p

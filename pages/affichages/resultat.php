@@ -6,6 +6,10 @@ $retour= poidsRestants($date_min,$date_max);
 $poid_total_ceuillette =  sumPoidCeuillette($date_min,$date_max); 
 $coup_de_reviens = coutDeRevient($date_min,$date_max);
 
+$somme_motant =  sum_v_montants($date_min, $date_max);
+$total_depense =   getMontantDepense($date_min, $date_max);
+$total_benefice =   Benefice($date_min, $date_max);
+
 ?>
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
@@ -33,6 +37,7 @@ $coup_de_reviens = coutDeRevient($date_min,$date_max);
                     <li class="nav-item"><a class="nav-link" href="../affichages/frontoffice.php"><i class="fas fa-table"></i><span>Ceuillette</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="../affichages/depense.php"><i class="fas fa-table"></i><span>depense</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="../affichages/formulaire_date.html"><i class="fas fa-table"></i><span>resultat</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="../affichages/listpayementceuilleur.php"><i class="fas fa-table"></i><span>list payement ceuilleur</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -41,8 +46,9 @@ $coup_de_reviens = coutDeRevient($date_min,$date_max);
             <div id="content">
                 <nav class="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                        <form class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <form  action="../traitement/deconnection.php" method="get" class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
                             <p>ProducTea</p>
+                            <button class="btn btn-primary" type="submit">deconnection</button>
                         </form>
                     </div>
                 </nav>
@@ -62,17 +68,38 @@ $coup_de_reviens = coutDeRevient($date_min,$date_max);
                      </div>
                     </div>
                   <div class="card mt-3">
-                   <div class="card-body">
-                     <h5 class="card-title">Coût de Revient par Kg</h5>
-                     <p class="card-text" id="coutRevientKg"><?= $coup_de_reviens ?> /kg</p>
+                    <div class="card-body">
+                      <h5 class="card-title">Coût de Revient par Kg</h5>
+                      <p class="card-text" id="coutRevientKg"><?= $coup_de_reviens ?> /kg</p>
+                    </div>
                    </div>
-                   </div>
+
+                       <div class="card">
+                        <div class="card-body">
+                         <h5 class="card-title">montant des vente</h5>
+                         <p class="card-text" id="poidsTotalCueillette"><?= $somme_motant ?> </p>
+                        </div>
+                       </div>
+
+                       <div class="card">
+                        <div class="card-body">
+                         <h5 class="card-title">total depense</h5>
+                         <p class="card-text" id="poidsTotalCueillette"><?= $total_depense ?> </p>
+                        </div>
+                       </div>
+
+                       <div class="card">
+                        <div class="card-body">
+                         <h5 class="card-title">benefice</h5>
+                         <p class="card-text" id="poidsTotalCueillette"><?= $total_benefice ?> </p>
+                        </div>
+                       </div>
                  </div>
                 </div>
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2024</span></div>
+                <div class="text-center my-auto copyright"><span>ETU-002658 ETU-002757 ETU-2440</span></div>
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>

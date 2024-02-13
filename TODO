@@ -44,14 +44,15 @@ Projet : Culture de the
                 -Formulaire(email , password , button)
             -Acceuil : 
                 -Formulaire : 
-                    -Saisie de cueilletes(date , cueilleur(checkBox) , parcelle , quantite cueilli)
-                    -Saisie de depense(date , categorie de depense(checkBox) , montant)
+                    -[ok]Saisie de cueilletes(date , cueilleur , parcelle , quantite cueilli)
+                    -[ok]Saisie de depense(date , categorie de depense, montant)
                 -Resultat : 
-                    -Poids total cueillettes
-                    -Poids restant sur les parcelles
-                    -Cout de revient par kg
+                    -[ok]Poids total cueillettes
+                    -[ok]Poids restant sur les parcelles
+                    -[ok]Cout de revient par kg
                 -Donnees :
                     Tables :
-                        -MouvementParcelle(idParcelle , quantiteMouvement)
                         -Cueillete(idCueillette , idUser , idCueilleur , idParcelle , quantite , date)
                         -DepenseCueillette(idCueillette , type , montant)
+
+     
