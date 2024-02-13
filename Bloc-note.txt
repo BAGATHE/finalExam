@@ -1,0 +1,39 @@
+Employée qui se connecte à un site pour voir le total de son salaire depuis son embauche dans l'entreprise.
+Il possède un taux journalier.
+
+To-Do List :
+    - index(login)
+        => Affichage(view)
+            *(OK) Formulaire de connexion(identifiant, mot de passe, bouton submit) //5min
+            *(OK)CSS  //5min
+        => Fonction(model)
+        => Intégration
+            *(OK) Action formulaire vers traitement-login  //5min
+        => Données
+
+    - traitement-login
+        => Affichage(view)
+        => Fonction(model)
+            *(OK)checkLogin(identifiant et mot de passe)
+        => Intégration
+            * (OK)Récupération de l'identifiant et du mot de passe
+            * (OK)Appel de la fonction checkLogin
+            *(OK)redirection selon le résultat de checkLogin
+                if true  -> salaire
+                if false -> index
+        => Données
+            * Table employees(id,nom,email,motdepasse,date_embauche,taux_journalier)
+
+    - salaire
+        => Affichage(view)
+            * nom, prénom
+            * Nombre de jour ouvrable depuis l'embauche
+            * Total salaire
+        => Fonction(model)
+            *(OK) calculSalaire(nombreJourOuvrable,taux_journalier)
+            *(OK) calculNombreJourOuvrable(date_embauche,date_actuelle)
+        => Intégration
+            *(OK) Récupération infos salarié
+            *(OK) Appel de calculNombreJourOuvrable et calculSalaire
+            * Affichage des données
+        => Données

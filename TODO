@@ -1,0 +1,57 @@
+Projet : Culture de the
+    BackOffice :
+        -Affichage
+            1-Login : 
+                -Formulaire(email , password , button)
+            2-Acceuil : 
+                -Sidebar(gestion des variete, gestion des parcelles , gestion des cueilleurs , gestion de categorie de depense , configuration salaire)
+                -Formulaire : 
+                    -[ok]Variete(nom , occupation , rendement)
+                    -[ok]Parcelle(numero , surface , variete plantee)
+                    -[ok]Cueilleur(nom , genre , date de naissance)
+                    -Depense
+                        -[ok]Type : engrais , carburant , ...
+            
+                    -[ok]Salaire(par kg)
+        -Metier 
+            1-Traitement-login :
+                -crypter(password)
+                -checkLogin(email , password)
+            2-Acceuil : 
+                -Fonction : 
+                    -[ok]insertVariete(nom , occupation , rendement)
+                    -[ok]insertParcelle(numero , surface , varietePlantee)
+                    -[ok]insertCueilleur(nom , genre , dateNaissance)
+                    -[ok]insertDepense(type , montant)
+                    -[ok]insertSalaire(montant)
+                    -[ok]getVarieThe();
+                -Donnee : 
+                    -Table : 
+                        -[ok]variete(idVariete , nom , occupation , rendement)
+                        -[ok]parcelle(idParcelle , numero , surface , idVariete)
+                        -[ok]cueilleur(idCueilleur , nom , genre , date de naissance)
+                        -[ok]categorie_depense(idDepense , type)
+                        -[ok]config_salaire(idSalaire , montant , idCueilleur , date)
+        -Integration 
+            1-Action login : 
+                -recuperation de l'email et du password
+                -appel de la fonction checkLogin(email , password)
+                    -if true -> acceuil
+                    -else -> login
+    FrontOffice :
+        Affichage 
+            -Login : 
+                -Formulaire(email , password , button)
+            -Acceuil : 
+                -Formulaire : 
+                    -Saisie de cueilletes(date , cueilleur(checkBox) , parcelle , quantite cueilli)
+                    -Saisie de depense(date , categorie de depense(checkBox) , montant)
+                -Resultat : 
+                    -Poids total cueillettes
+                    -Poids restant sur les parcelles
+                    -Cout de revient par kg
+                -Donnees :
+                    Tables :
+                        -MouvementParcelle(idParcelle , quantiteMouvement)
+                        -Cueillete(idCueillette , idUser , idCueilleur , idParcelle , quantite , date)
+                        -DepenseCueillette(idCueillette , type , montant)
