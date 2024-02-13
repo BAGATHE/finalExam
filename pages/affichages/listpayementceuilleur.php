@@ -44,6 +44,7 @@ $ceuilleur = getCeuilleur();
                     <li class="nav-item"><a class="nav-link" href="../affichages/depense.php"><i class="fas fa-table"></i><span>depense</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="../affichages/formulaire_date.html"><i class="fas fa-table"></i><span>resultat</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="../affichages/listpayementceuilleur.php"><i class="fas fa-table"></i><span>list payement ceuilleur</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="../affichages/prevision.html"><i class="fas fa-table"></i><span>Prevision</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>

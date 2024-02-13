@@ -1,9 +1,3 @@
-<?php 
-include "../../inc/function.php"; 
-$catdepense = get_categorie_depense();
-
-?>
-
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
 
@@ -40,31 +34,33 @@ $catdepense = get_categorie_depense();
             <div id="content">
                 <nav class="navbar navbar-expand bg-white shadow mb-4 topbar static-top navbar-light">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle me-3" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                    <form  action="../traitement/deconnection.php" method="get" class="d-none d-sm-inline-block me-auto ms-md-3 my-2 my-md-0 mw-100 navbar-search">
-                            <p>ProducTea</p>
-                            <button class="btn btn-primary" type="submit">deconnection</button>
-                        </form>
+
                     </div>
                 </nav>
                 <div class="row">
-                    <div class="col-md-6 mx-auto">
-                        <h2 class="text-center mb-4">Saisie des Dépenses</h2>
-                        <form action="../traitement/traitement_depense.php" method="post">
-                            <div class="form-group"><label class="form-label" for="date">Date :</label>
-                                <input class="form-control form-control" type="date" id="date"  name="date"  required=""></div>
-                            <div class="form-group"><label class="form-label" for="categorie">Catégorie de Dépense :</label>
-                                <select class="form-control" id="categorie" name="categorie" required="">
-                                    <option value="" selected="">Choisissez la catégorie</option>
-                                    <?php while ($data = mysqli_fetch_assoc($catdepense)) { ?>
-                                        <option value="<?= $data["id_categorie_depense"] ?>"><?= $data["type_categorie_depense"] ?></option>
-                                    <?php } ?>
-                                </select></div>
-                            <div class="form-group"><label class="form-label" for="montant">Montant:</label>
-                                <input class="form-control form-control" type="number" id="montant" name="montant"  placeholder="Entrez le montant" required="" step="0.01"></div>
-                                <button class="btn btn-primary btn-block" type="submit">Enregistrer la Dépense</button>
-                        </form>
-                    
-                     </div>
+                    <h1 class="mb-4">PREVISION</h1>
+                <form method="post" id="formulaire">
+                            <input type="date" id="date" name="date" class="form-control">
+                            <input type="submit" value="recherche">
+                </form>
+                    <h3 id="poids" class="mb-2"> </h3>
+                    <h3 id="Montant"> </h3>
+                
+                    <div class="parcel">
+                        <h2 class="text-success">PARCELLE #1: THE SAHAMBAVY</h2>
+                       <!-- <img src="assets/img/sahambavy.jpg" alt="Sahambavy" class="img-fluid mb-2">-->
+                        <p>Surface : 15.2 hectares</p>
+                        <p>Nombre de pieds : 62</p>
+                        <p>Poids de thé restant : 320 kg</p>
+                    </div>
+                
+                    <div class="parcel">
+                        <h2 class="text-success">PARCELLE #2: THE CACAO</h2>
+                        <!--<img src="assets/img/cacao.jpg" alt="Cacao" class="img-fluid mb-2">-->
+                        <p>Surface : 10 hectares</p>
+                        <p>Nombre de pieds : 11</p>
+                        <p>Poids de thé restant : 10 kg</p>
+                    </div>
                 </div>
             </div>
             <footer class="bg-white sticky-footer">
@@ -74,6 +70,73 @@ $catdepense = get_categorie_depense();
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
+    <script>
+var formulaire=document.getElementById("formulaire");
+
+function getNavigateur() {
+  var xhr; 
+      try {  xhr = new ActiveXObject('Msxml2.XMLHTTP');   }
+      catch (e) { 
+          try {   xhr = new ActiveXObject('Microsoft.XMLHTTP'); }
+          catch (e2) {
+              try {  xhr = new XMLHttpRequest();  }
+              catch (e3) {  xhr = false;   }
+          }
+      }
+  return xhr;
+}
+
+// ---- Envoyer les donnees du formulaire-----//
+function sendData() {
+    var xhr=getNavigateur()
+            
+    xhr.onreadystatechange = function(){
+      if(xhr.readyState === 4){
+          if(xhr.status === 200){
+            var reponse =JSON.parse(xhr.responseText);
+            if (reponse!=null) {
+               var montant =  document.querySelector("#Montant");
+               var poids = document.querySelector("#poids");
+               montant.innerHTML= '';
+               montant.innerHTML = "Montant : " +reponse[0].montant;
+               poids.innerHTML  = '';
+               poids.innerHTML  = "Poids total thé restant : " + reponse[0].restepoid;
+
+              console.log(reponse);
+            }else{
+              alert("gsfiSFHQGSli");
+            }
+          }
+      }
+    };
+
+    xhr.addEventListener("load", function(event) {
+    });
+    
+    xhr.addEventListener("error", function(event) {
+        alert('Oups! Quelque chose s\'est mal passé.');
+    });
+    
+    xhr.open("POST", "../../pages/traitement/traitement_recherche.php");
+        
+    var formData = new FormData(formulaire);
+    
+    xhr.send(formData);
+}
+// ---- Envoyer les donnees -----//
+
+window.addEventListener("load", function () {
+
+  formulaire.addEventListener("submit", function (event) {
+      event.preventDefault(); // évite de faire le submit par défaut
+      sendData();
+  });
+}); 
+
+</script>
+
+
+
     <script src="../../assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="../../assets/js/theme.js"></script>
     <script src="../../assets/js/js/jquery.min.js"></script>

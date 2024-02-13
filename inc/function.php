@@ -231,6 +231,37 @@
     }    
 
 
+
+
+    function previsionByParcelle($date){
+        $sql="select id_parcelle,nom_variete,prix_vente*((surface_en_hectare*10000)/ocupation)*rendement_mensuel-sum(poid_ceuillette) as total  ,(surface_en_hectare*10000)/ocupation as pied,((surface_en_hectare*10000)/ocupation)*rendement_mensuel-sum(poid_ceuillette) as reste from parcelle natural join variete_the natural join ceuillette where date_ceuillette='$date' group by id_parcelle";
+        $sql = mysqli_query(connect(), $sql);
+        $retour=array();
+        while($data = mysqli_fetch_assoc($sql)){
+            $retour[]=array("id_parcelle"=>$data["id_parcelle"],"nom_variete"=>$data["nom_variete"],"total"=>$data["total"],"pied"=>$data["pied"],"reste"=>$data["reste"]);
+        }   
+        return $retour;
+    }
+
+    function sommeMontant($date){
+        $retour=previsionByParcelle($date);
+        $somme=0;
+        for ($i=0; $i <count($retour) ; $i++) { 
+           $somme=$somme+$retour[$i]["total"];
+        }
+        return $somme;
+    }
+
+    function sommeReste($date){
+        $retour=previsionByParcelle($date);
+        $somme=0;
+        for ($i=0; $i <count($retour) ; $i++) { 
+           $somme=$somme+$retour[$i]["reste"];
+        }
+        return $somme;
+    }
+
+
 ?>
 
 
